@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Folio · identidad</title>
+<link rel="stylesheet" href="estilo.css">
+<style>
+  .portada { padding: 3rem 0 2.5rem; border-bottom: 2px solid var(--tinta); margin-bottom: 2.5rem; }
+  .portada .marca { font-size: 2.25rem; margin-bottom: 1.5rem; }
+  .portada h1 { font-size: 2.5rem; }
+  section { margin-bottom: 3rem; }
+  section > h2 { padding-bottom: 0.5rem; border-bottom: 1px solid var(--hilo); margin-bottom: 1rem; }
+  .muestras { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1rem; }
+  .muestra { border: 1px solid var(--hilo); border-radius: var(--radio); overflow: hidden; background: #fff; }
+  .muestra i { display: block; height: 4.5rem; }
+  .muestra div { padding: 0.6rem 0.7rem; }
+  .muestra b { display: block; font-size: 0.9375rem; }
+  .muestra code { font-family: var(--maquina); font-size: 0.75rem; color: var(--lapiz); }
+  .muestra small { display: block; margin-top: 0.25rem; line-height: 1.35; }
+  .tipo p { margin-bottom: 0.5rem; }
+  .tipo .h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; }
+  .tipo .h2 { font-size: 1.25rem; font-weight: 600; }
+  .fila { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+  .voz { display: grid; gap: 1rem; }
+  @media (min-width: 40rem) { .voz { grid-template-columns: 1fr 1fr; } }
+  .voz div { padding: 0.75rem 1rem; border: 1px solid var(--hilo); border-radius: var(--radio); background: #fff; }
+  .voz .maquina { display: block; margin-bottom: 0.4rem; }
+  .voz .no .maquina { color: var(--sello-rojo); }
+  .voz .si .maquina { color: var(--sello-verde); }
+  .item { display: grid; gap: 0.6rem; }
+  .item header { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  .no-hacemos li { margin-bottom: 0.5rem; }
+</style>
+</head>
+<body>
+<main class="hoja">
+
+  <header class="portada">
+    <span class="marca">Folio</span>
+    <h1>Tu caso, en orden.</h1>
+    <p>Folio ayuda a una persona con una compra fallida a reunir lo que tiene, ver qué falta y dar un primer paso sin que nadie decida por ella.</p>
+    <p class="maquina">Guía de identidad · caso BRISA · Icesi + Tecmilenio · 11 sep 2026</p>
+  </header>
+
+  <section>
+    <h2>El nombre</h2>
+    <p>Un folio es el número que convierte un papel suelto en un registro: el pedido tiene folio, la queja tiene folio, el paquete tiene guía. Cuando Mariana abre su caso en Folio, su historia deja de ser una carpeta de capturas en el teléfono y se vuelve un expediente con orden, fechas y huecos señalados.</p>
+    <p>Se pronuncia igual en México y en Colombia, cabe en un botón y no promete nada que no cumpla: no dice “justicia”, no dice “abogado”, no dice “IA”.</p>
+  </section>
+
+  <section>
+    <h2>La idea visual</h2>
+    <p>Un expediente de oficina llevado al teléfono. Papel bond, tinta, hilos finos entre renglones y, como firma, <strong>sellos de tinta</strong> que solo aparecen cuando dicen algo verdadero sobre el estado del caso.</p>
+    <div class="fila">
+      <span class="sello">Pendiente</span>
+      <span class="sello">Señal</span>
+      <span class="sello sello--azul">Lo tengo</span>
+      <span class="sello sello--verde">Copiado</span>
+    </div>
+    <p class="chico">Un sello nunca decora. PENDIENTE marca lo que falta y no se inventa. SEÑAL marca un cruce de datos que merece atención. LO TENGO confirma lo que la persona ya reunió.</p>
+  </section>
+
+  <section>
+    <h2>Color</h2>
+    <div class="muestras">
+      <div class="muestra"><i style="background:#f9f8f4;border-bottom:1px solid var(--hilo)"></i><div><b>Papel bond</b><code>#f9f8f4</code><small>Fondo de todo. Neutro, no crema.</small></div></div>
+      <div class="muestra"><i style="background:#f1efe8"></i><div><b>Papel sombra</b><code>#f1efe8</code><small>Franjas de aviso, bloques secundarios.</small></div></div>
+      <div class="muestra"><i style="background:#17181a"></i><div><b>Tinta</b><code>#17181a</code><small>Texto, bordes, estados seleccionados.</small></div></div>
+      <div class="muestra"><i style="background:#5f6368"></i><div><b>Lápiz</b><code>#5f6368</code><small>Texto secundario, etiquetas.</small></div></div>
+      <div class="muestra"><i style="background:#dcdcd5"></i><div><b>Hilo</b><code>#dcdcd5</code><small>Separadores de un píxel.</small></div></div>
+      <div class="muestra"><i style="background:#b3261e"></i><div><b>Sello rojo</b><code>#b3261e</code><small>PENDIENTE y SEÑAL. Nunca para botones.</small></div></div>
+      <div class="muestra"><i style="background:#2b4fb0"></i><div><b>Sello azul</b><code>#2b4fb0</code><small>Acción principal, enlaces, marca.</small></div></div>
+      <div class="muestra"><i style="background:#256c47"></i><div><b>Sello verde</b><code>#256c47</code><small>Solo confirmaciones breves.</small></div></div>
+    </div>
+    <p class="chico" style="margin-top:1rem">Sin gradientes, sin sombras, sin modo oscuro: el papel no lo tiene.</p>
+  </section>
+
+  <section class="tipo">
+    <h2>Tipografía</h2>
+    <p>Dos voces, ambas del sistema para que cargue sin conexión:</p>
+    <p class="h1">La sans del teléfono para hablar con la persona.</p>
+    <p class="h2">Títulos en 600, tracking ligeramente cerrado.</p>
+    <p>Cuerpo a 1rem con interlineado 1.5. Frases cortas. Nada en negritas que no sea una acción o un nombre.</p>
+    <p class="maquina">Máquina de escribir para folios · fechas · sellos · etiquetas</p>
+    <p class="chico">American Typewriter en iOS y Mac; Courier New en el resto. La voz de máquina se reserva a metadatos: es lo que “escribió el sistema”, no lo que le decimos a la persona.</p>
+  </section>
+
+  <section>
+    <h2>Componentes</h2>
+
+    <div class="folio-cabecera">
+      <span class="maquina">Folio 0917-01 · 11 sep 2026</span>
+      <span class="maquina">Borrador</span>
+    </div>
+
+    <ul class="lista">
+      <li class="item">
+        <header>
+          <div><h3>Comprobante del pago</h3><small>Muestra quién te cobró realmente.</small></div>
+          <span class="sello sello--azul sello--recto">Lo tengo</span>
+        </header>
+        <div class="opciones">
+          <label class="opcion"><input type="radio" name="d1" checked><span>Lo tengo</span></label>
+          <label class="opcion"><input type="radio" name="d1"><span>No lo tengo</span></label>
+          <label class="opcion"><input type="radio" name="d1"><span>No sé</span></label>
+        </div>
+        <textarea class="nota" placeholder="¿Qué dice? Copia el texto o escribe fecha, quién aparece y qué promete.">20 de agosto de 2026. $4,200.00 MXN. Descriptor: PUENTE DIGITAL ANDINO BOG CO.</textarea>
+      </li>
+      <li class="item">
+        <header>
+          <div><h3>Términos del día que compraste</h3><small>La versión que aceptaste. Casi nadie la guarda; es normal.</small></div>
+          <span class="sello">Pendiente</span>
+        </header>
+        <p class="chico" style="margin:0"><strong>Cómo pedirlo:</strong> pide por escrito la versión exacta de términos que aceptaste, con su identificador y fecha de publicación.</p>
+      </li>
+    </ul>
+
+    <p style="margin-top:1.5rem"><span class="sello">Señal</span></p>
+    <div class="aviso aviso--rojo">
+      <strong>Quien te cobró no es quien te envió.</strong>
+      <p class="chico" style="margin:0.25rem 0 0">El pago dice Puente Digital Andino SAS; la guía dice Vístula Devices México. Es una pregunta legítima para la empresa: ¿quién responde?</p>
+    </div>
+
+    <div class="fila" style="margin-top:1.5rem">
+      <button class="boton boton--primario">Copiar resumen</button>
+      <button class="boton">Descargar resumen</button>
+      <button class="boton boton--suave">Corregir</button>
+      <button class="boton boton--peligro">Borrar todo</button>
+    </div>
+
+    <div class="aviso aviso--azul">
+      <strong>No te pediremos identificación ni estados de cuenta.</strong>
+      <p class="chico" style="margin:0.25rem 0 0">Para ordenar tu caso no hacen falta.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo escribimos</h2>
+    <div class="voz">
+      <div class="no"><span class="maquina">Así no</span>¡Activa tu garantía ahora! Sube tu INE y tu estado de cuenta para continuar. Tienes 5 días.</div>
+      <div class="si"><span class="maquina">Así sí</span>Para ordenar tu caso no hace falta tu identificación. Marca qué tienes; lo que falte, te decimos cómo pedirlo.</div>
+      <div class="no"><span class="maquina">Así no</span>Nuestra IA analizó tu caso y determinó que tienes derecho a reembolso.</div>
+      <div class="si"><span class="maquina">Así sí</span>Generado a partir de tus notas · revísalo. Esto no decide si tienes razón; muestra qué tienes y qué falta.</div>
+    </div>
+    <ul class="no-hacemos" style="margin-top:1.25rem">
+      <li>Verbos activos y botones que dicen lo que hacen: “Copiar resumen”, no “Enviar”.</li>
+      <li>Lo que no sabemos se llama PENDIENTE. Nunca se rellena.</li>
+      <li>Nunca una cuenta regresiva. La presión de tiempo es la táctica del otro lado; aquí nadie tiene que decidir hoy.</li>
+      <li>La persona siempre puede pausar y hablar con alguien. Ese botón no se esconde.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Lo que no hacemos</h2>
+    <ul class="no-hacemos">
+      <li>Emojis, iconos decorativos, destellos de “IA”.</li>
+      <li>Gradientes, tarjetas flotantes con sombra, esquinas muy redondas.</li>
+      <li>Morados y violetas de asistente virtual.</li>
+      <li>Balanzas, martillos, columnas ni ningún cliché de justicia.</li>
+      <li>Fuentes descargadas: si no carga sin internet, no sirve para Mariana.</li>
+    </ul>
+  </section>
+
+  <footer class="chico">
+    <p>Para usar la identidad: <code>&lt;link rel="stylesheet" href="../identidad/estilo.css"&gt;</code> y las clases <code>.hoja .sello .boton .opcion .lista .nota .aviso .maquina .marca</code>.</p>
+  </footer>
+</main>
+</body>
+</html>

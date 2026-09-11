@@ -1,0 +1,194 @@
+/* Folio — identidad visual compartida. Sin recursos externos: funciona offline. */
+
+:root {
+  --papel: #f9f8f4;
+  --papel-2: #f1efe8;
+  --tinta: #17181a;
+  --lapiz: #5f6368;
+  --hilo: #dcdcd5;
+  --sello-rojo: #b3261e;
+  --sello-azul: #2b4fb0;
+  --sello-verde: #256c47;
+
+  --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --maquina: "American Typewriter", "Courier Prime", "Courier New", monospace;
+
+  --ancho: 36rem;
+  --radio: 4px;
+  --toque: 44px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font: 1rem/1.5 var(--sans);
+}
+
+/* Tipografía */
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.01em; margin: 0 0 0.5rem; }
+h1 { font-size: 2rem; line-height: 1.15; }
+h2 { font-size: 1.25rem; line-height: 1.3; }
+h3 { font-size: 1rem; line-height: 1.4; }
+p { margin: 0 0 1rem; }
+small, .chico { font-size: 0.875rem; color: var(--lapiz); }
+a { color: var(--sello-azul); }
+
+.maquina {
+  font-family: var(--maquina);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lapiz);
+}
+
+/* Contenedor */
+.hoja { max-width: var(--ancho); margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
+
+/* Sellos: solo donde codifican un estado real */
+.sello {
+  display: inline-block;
+  font-family: var(--maquina);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 0.4em 0.6em;
+  border: 2px solid currentColor;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+  color: var(--sello-rojo);
+  vertical-align: middle;
+}
+.sello--azul { color: var(--sello-azul); }
+.sello--verde { color: var(--sello-verde); }
+.sello--recto { transform: none; }
+
+/* Botones */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--toque);
+  padding: 0 1.25rem;
+  font: 600 1rem/1 var(--sans);
+  color: var(--tinta);
+  background: transparent;
+  border: 1.5px solid var(--tinta);
+  border-radius: var(--radio);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 150ms, color 150ms;
+}
+.boton--primario { background: var(--sello-azul); border-color: var(--sello-azul); color: #fff; }
+.boton--primario:hover { background: #24449a; }
+.boton--suave { border-color: var(--hilo); color: var(--lapiz); }
+.boton--peligro { border-color: var(--sello-rojo); color: var(--sello-rojo); }
+.boton:focus-visible, .opcion input:focus-visible + span, .nota:focus-visible, a:focus-visible {
+  outline: 3px solid var(--sello-azul);
+  outline-offset: 2px;
+}
+.boton--ancho { width: 100%; }
+
+/* Opciones (radios como pills) */
+.opciones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.opcion { position: relative; }
+.opcion input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.opcion span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border: 1.5px solid var(--hilo);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: background-color 150ms, border-color 150ms, color 150ms;
+}
+.opcion input:checked + span { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+
+/* Listas de expediente: hairlines, no tarjetas */
+.lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hilo); }
+.lista > li { border-bottom: 1px solid var(--hilo); padding: 1rem 0; }
+
+/* Campos */
+.nota {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.75rem;
+  font: 1rem/1.5 var(--sans);
+  color: var(--tinta);
+  background: #fff;
+  border: 1.5px solid var(--hilo);
+  border-radius: var(--radio);
+  resize: vertical;
+}
+.nota:focus { border-color: var(--tinta); outline: none; }
+
+/* Aviso: una franja, no una tarjeta */
+.aviso {
+  padding: 0.75rem 0 0.75rem 1rem;
+  border-left: 3px solid var(--tinta);
+  background: var(--papel-2);
+}
+.aviso--rojo { border-left-color: var(--sello-rojo); }
+.aviso--azul { border-left-color: var(--sello-azul); }
+
+/* Encabezado de expediente */
+.folio-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--tinta);
+  margin-bottom: 1.5rem;
+}
+
+/* Barra inferior fija */
+.barra {
+  position: fixed;
+  inset: auto 0 0 0;
+  background: var(--papel);
+  border-top: 1px solid var(--hilo);
+  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom));
+}
+.barra__interior {
+  max-width: var(--ancho);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Marca */
+.marca {
+  display: inline-block;
+  font-family: var(--maquina);
+  font-size: 1.125rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.5em 0.7em 0.45em;
+  color: var(--sello-azul);
+  border: 2.5px solid currentColor;
+  outline: 1.5px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 3px;
+  transform: rotate(-2deg);
+  mix-blend-mode: multiply;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
