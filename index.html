@@ -3,39 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Caso BRISA · prototipos</title>
+<title>Folio · caso BRISA</title>
+<link rel="stylesheet" href="identidad/estilo.css">
 <style>
-  :root { --papel:#f9f8f4; --tinta:#17181a; --gris:#5f6368; --linea:#dcdcd5; --azul:#2b4fb0; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--papel); color:var(--tinta); font:1rem/1.5 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
-  main { max-width:36rem; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
-  .folio { font:0.75rem "American Typewriter","Courier New",monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--gris); }
-  h1 { font-size:2rem; line-height:1.15; letter-spacing:-.01em; margin:.5rem 0 1rem; font-weight:600; }
-  p { margin:0 0 1rem; }
-  ul { list-style:none; padding:0; margin:2rem 0 0; border-top:1px solid var(--linea); }
-  li { border-bottom:1px solid var(--linea); padding:1.25rem 0; }
-  a { color:var(--azul); font-weight:600; text-decoration:none; font-size:1.125rem; }
-  a:hover, a:focus-visible { text-decoration:underline; outline:none; }
-  li p { color:var(--gris); margin:.25rem 0 0; }
-  footer { margin-top:3rem; color:var(--gris); font-size:.875rem; }
+  .hoja { padding-top: 3rem; }
+  .marca { margin-bottom: 1.5rem; }
+  .lista a { font-weight: 600; font-size: 1.125rem; text-decoration: none; }
+  .lista a:hover { text-decoration: underline; }
+  .lista p { margin: 0.25rem 0 0; }
+  footer { margin-top: 3rem; }
 </style>
 </head>
 <body>
-<main>
-  <p class="folio">AI &amp; Access to Justice Challenge · Icesi + Tecmilenio · 11 sep 2026</p>
-  <h1>Caso BRISA</h1>
+<main class="hoja">
+  <span class="marca">Folio</span>
+  <h1>Tu caso, en orden.</h1>
   <p>Dos herramientas para que una persona con una compra fallida entienda su situación y dé un primer paso sin perder el control.</p>
-  <ul>
+  <p class="maquina">AI &amp; Access to Justice Challenge · Icesi + Tecmilenio · 11 sep 2026</p>
+
+  <ul class="lista" style="margin-top:2rem">
     <li>
-      <a href="organizar-evidencia/">Tu caso, en orden</a>
-      <p>Reúne lo que tienes, ve qué falta y prepara un resumen que tú decides si enviar.</p>
+      <a href="organizar-evidencia/">Organizar mi evidencia</a>
+      <p class="chico">Reúne lo que tienes, ve qué falta y prepara un resumen que tú decides si enviar.</p>
     </li>
     <li>
-      <a href="explicar-opciones/">Tus opciones, con fuentes</a>
-      <p>Qué caminos existen y de dónde sale cada afirmación. Revisado por una persona antes de actuar.</p>
+      <a href="explicar-opciones/">Entender mis opciones</a>
+      <p class="chico">Qué caminos existen y de dónde sale cada afirmación. Revisado por una persona antes de actuar.</p>
+    </li>
+    <li>
+      <a href="identidad/">Guía de identidad</a>
+      <p class="chico">Nombre, color, tipografía, componentes y voz. Para que todo lo que construyamos se vea igual.</p>
     </li>
   </ul>
-  <footer>Caso ficticio. Estas herramientas ordenan información; no deciden por ti ni sustituyen asesoría jurídica.</footer>
+
+  <footer class="chico">Caso ficticio. Folio ordena información; no decide por ti ni sustituye asesoría jurídica.</footer>
 </main>
 </body>
 </html>
