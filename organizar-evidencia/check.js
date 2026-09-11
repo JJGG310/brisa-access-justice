@@ -39,3 +39,17 @@ assert.deepStrictEqual(vacio.senales, []);
 assert.strictEqual(vacio.pendientes.length, CATALOGO.length);
 
 console.log('check.js: todo en orden (' + a.senales.length + ' señales en el caso Brisa)');
+
+// api/analizar.js: construcción del prompt y parseo de la respuesta (sin red)
+const api = require('../api/analizar.js');
+const msgs = api.construirMensajes({ pago: { estado: 'tengo', nota: 'Cobro de $4,200' }, guia: { estado: 'no', nota: '' } }, [{ id: 'pago', nombre: 'Pago' }, { id: 'guia', nombre: 'Guía' }]);
+assert.strictEqual(msgs.length, 2);
+assert.ok(msgs[1].content.includes('[pago] Pago:\nCobro de $4,200'));
+assert.ok(msgs[1].content.includes('MARCADO COMO NO DISPONIBLE\n[guia] Guía'));
+assert.ok(msgs[0].content.includes('No inventes'));
+const ok = api.parsear('{"senales":[{"texto":"a","porque":"b"}],"presion":{"detectada":true,"porque":"cupón"},"borrador":"x"}');
+assert.strictEqual(ok.senales.length, 1);
+assert.strictEqual(ok.presion.detectada, true);
+assert.deepStrictEqual(ok.pendientes, []);
+assert.strictEqual(api.parsear('no es json'), null);
+console.log('api/analizar.js: prompt y parseo en orden');

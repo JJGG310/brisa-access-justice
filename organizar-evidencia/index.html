@@ -89,6 +89,11 @@ td:first-child{font-weight:600;white-space:nowrap}
 .porque{color:var(--sec);font-size:.9rem}
 .pausa-b{margin:2.5rem 0 0;padding:1rem;border:1px solid var(--tinta)}
 .pausa-b p{margin:0 0 .75rem}
+.aviso-rojo{border-left-color:var(--rojo)}
+.ia-lista li{padding:.5rem 0;border-bottom:1px dotted var(--linea)}
+.ia-lista .tipo{font:.7rem/1.4 var(--tw);text-transform:uppercase;letter-spacing:.06em;color:var(--sec)}
+#ia h4{margin-top:1.25rem}
+#borrador{min-height:14rem;margin-bottom:1rem}
 
 /* paso 3 */
 pre{white-space:pre-wrap;word-wrap:break-word;font:.8rem/1.55 var(--tw);border:1px solid var(--linea);padding:1rem;background:#fff;margin:1rem 0 0;overflow-x:auto}
@@ -141,6 +146,12 @@ nav .btn-p{white-space:nowrap;padding:.6rem 1.1rem}
   <div class="bloque"><h3>Lo prometido y lo que dicen ahora</h3><div id="promesas"></div></div>
   <div class="bloque"><h3>Señales</h3><div id="senales"></div></div>
   <div class="bloque"><h3>Pendientes</h3><div id="pendientes"></div></div>
+  <div class="bloque"><h3>Análisis con IA</h3>
+    <p class="sec">Opcional. Envía solo el texto de tus notas (no tus archivos) a un servicio de IA externo para clasificarlas, cruzarlas y preparar un borrador. Tú revisas todo antes de usarlo.</p>
+    <div class="fila"><button id="ia-btn">Analizar con IA</button></div>
+    <p class="ok" id="ia-msg" aria-live="polite"></p>
+    <div id="ia"></div>
+  </div>
   <div class="pausa-b"><p><strong>¿Te sientes presionada o amenazada?</strong></p><button class="pausar">Pausar y hablar con una persona</button></div>
 </section>
 
@@ -153,6 +164,11 @@ nav .btn-p{white-space:nowrap;padding:.6rem 1.1rem}
     <button id="descargar">Descargar resumen (.txt)</button>
   </div>
   <p class="ok" id="okmsg" aria-live="polite"></p>
+  <div id="borrador-b" hidden>
+    <p class="gen">Borrador sugerido por IA · revísalo y edítalo · no se envía desde aquí</p>
+    <label class="vh" for="borrador">Borrador de solicitud por escrito</label>
+    <textarea id="borrador"></textarea>
+  </div>
   <pre id="resumen" tabindex="0"></pre>
   <p class="chica sec" style="margin-top:1rem">Borrar quita tus notas de este teléfono. Si descargaste el resumen, ese archivo se conserva.</p>
   <button class="btn-chico" id="borrar">Borrar todo</button>
@@ -278,6 +294,52 @@ $('#pendientes').addEventListener('click', e => {
   el.querySelector('input').focus({ preventScroll: true });
 });
 
+// ---------- Análisis con IA ----------
+const KEY_IA = 'tu-caso-ia-v1';
+let ia = null;
+try { ia = JSON.parse(localStorage.getItem(KEY_IA)); } catch (e) { ia = null; }
+function guardarIA() { try { if (ia) localStorage.setItem(KEY_IA, JSON.stringify(ia)); else localStorage.removeItem(KEY_IA); } catch (e) { /* sigue en memoria */ } }
+const nombreDe = id => { const c = CATALOGO.find(c => c.id === id); return c ? c.nombre : id; };
+
+async function analizarIA() {
+  const btn = $('#ia-btn'), msg = $('#ia-msg');
+  btn.disabled = true; msg.textContent = 'Analizando… puede tardar unos segundos.';
+  try {
+    const enviar = {};
+    CATALOGO.forEach(c => { const x = items[c.id]; if (x) enviar[c.id] = { estado: x.estado, nota: x.estado === 'tengo' ? (x.nota || '') : '' }; });
+    const r = await fetch('/api/analizar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: enviar, catalogo: CATALOGO.map(c => ({ id: c.id, nombre: c.nombre })) }) });
+    const j = await r.json().catch(() => null);
+    if (!r.ok || !j) throw new Error((j && j.error) || ('error ' + r.status));
+    ia = j; ia.fecha = hoy(); guardarIA();
+    msg.textContent = 'Listo. Revisa lo sugerido.';
+    renderIA();
+  } catch (e) {
+    msg.textContent = 'No se pudo analizar (' + e.message + '). Tu expediente con reglas simples sigue disponible.';
+  }
+  btn.disabled = false;
+}
+
+function renderIA() {
+  if (!ia) { $('#ia').innerHTML = ''; return; }
+  const gen = '<p class="gen">Sugerido por IA · revísalo · ' + esc(ia.fecha || '') + '</p>';
+  let h = gen;
+  if (ia.presion.detectada) {
+    h += '<div class="aviso aviso-rojo"><p><strong>La IA detectó presión en tus mensajes.</strong> ' + esc(ia.presion.porque) + '</p>' +
+      '<p style="margin-top:.5rem">Aquí se detiene el análisis automático: no se prepara ningún borrador de respuesta ni de negociación. Puedes pausar y hablar con una persona.</p>' +
+      '<p style="margin-top:.75rem"><button class="pausar">Pausar y hablar con una persona</button></p></div>';
+  }
+  if (ia.clasificacion.length) h += '<h4>Qué es cada cosa</h4><ul class="ia-lista">' + ia.clasificacion.map(c =>
+    '<li><span class="tipo">' + esc(c.tipo || 'otro') + '</span> <strong>' + esc(nombreDe(c.id)) + '</strong><br>' + esc(c.resumen || '') + '</li>').join('') + '</ul>';
+  if (ia.senales.length) h += '<h4>Señales</h4>' + ia.senales.map(s => '<div class="senal"><span class="sello sello-rojo">Señal</span><div><p>' + esc(s.texto) + '</p><p class="porque">Por qué importa: ' + esc(s.porque) + '</p></div></div>').join('');
+  if (ia.pendientes.length) h += '<h4>Pendientes</h4>' + ia.pendientes.map(q => '<div class="pend">' + SELLO_PEND + '<div><h4 style="margin-top:0">' + esc(q.nombre) + '</h4><p class="chica">' + esc(q.pedir) + '</p></div></div>').join('');
+  if (ia.limites.length) h += '<h4>Lo que este análisis no puede afirmar</h4><ul class="ia-lista">' + ia.limites.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul>';
+  if (ia.borrador && !ia.presion.detectada) h += '<p class="sec" style="margin-top:1.25rem">Hay un borrador de solicitud por escrito en el paso 3, listo para que lo revises.</p>';
+  $('#ia').innerHTML = h;
+  $('#ia').querySelectorAll('.pausar').forEach(b => b.addEventListener('click', () => ir(4)));
+}
+$('#ia-btn').addEventListener('click', analizarIA);
+$('#borrador').addEventListener('input', e => { if (ia) { ia.borrador = e.target.value; guardarIA(); } });
+
 // ---------- Paso 3 ----------
 function resumenTexto() {
   const a = analizar({ items, catalogo: CATALOGO });
@@ -301,10 +363,23 @@ function resumenTexto() {
   L.push.apply(L, a.senales.length ? a.senales.map(s => '[SEÑAL] ' + s.texto + '\n  Por qué importa: ' + s.porque) : ['(sin cruces con lo que hay)']);
   L.push('', 'PENDIENTES');
   L.push.apply(L, a.pendientes.length ? a.pendientes.map(q => '[PENDIENTE] ' + q.nombre + '\n  Cómo pedirlo: ' + q.pedir) : ['(nada pendiente)']);
-  L.push('', 'Este resumen es mío. Yo decido si lo envío, a quién y cuándo.', 'Hecho con reglas simples a partir de mis notas; no es una opinión jurídica.');
+  if (ia) {
+    L.push('', 'ANÁLISIS CON IA (sugerido el ' + (ia.fecha || '') + ', revisado por mí)');
+    if (ia.presion.detectada) L.push('[PRESIÓN DETECTADA] ' + ia.presion.porque, 'El análisis automático se detuvo aquí.');
+    L.push.apply(L, ia.senales.map(s => '[SEÑAL] ' + s.texto + '\n  Por qué importa: ' + s.porque));
+    L.push.apply(L, ia.pendientes.map(q => '[PENDIENTE] ' + q.nombre + '\n  Cómo pedirlo: ' + q.pedir));
+    L.push.apply(L, ia.limites.map(l => 'Límite: ' + l));
+    if (ia.borrador && !ia.presion.detectada) L.push('', 'BORRADOR DE SOLICITUD POR ESCRITO (revisado por mí)', ia.borrador);
+  }
+  L.push('', 'Este resumen es mío. Yo decido si lo envío, a quién y cuándo.', 'Hecho a partir de mis notas con reglas simples' + (ia ? ' y sugerencias de IA que revisé' : '') + '; no es una opinión jurídica.');
   return L.join('\n');
 }
-function renderPaso3() { $('#resumen').textContent = resumenTexto(); $('#okmsg').textContent = ''; }
+function renderPaso3() {
+  const conBorrador = !!(ia && ia.borrador && !ia.presion.detectada);
+  $('#borrador-b').hidden = !conBorrador;
+  if (conBorrador) $('#borrador').value = ia.borrador;
+  $('#resumen').textContent = resumenTexto(); $('#okmsg').textContent = '';
+}
 
 $('#copiar').addEventListener('click', () => {
   const t = $('#resumen').textContent;
@@ -325,7 +400,7 @@ $('#descargar').addEventListener('click', () => {
 });
 $('#borrar').addEventListener('click', () => {
   if (!confirm('¿Borrar todas tus notas de este teléfono? No se puede deshacer.')) return;
-  items = {};
+  items = {}; ia = null; guardarIA();
   try { localStorage.removeItem(KEY); } catch (e) { /* nada que borrar */ }
   renderPaso1(); ir(0);
 });
@@ -338,13 +413,13 @@ function ir(n) {
   $('nav').hidden = n < 1 || n > 3;
   document.querySelectorAll('nav .pasos button').forEach(b => { if (+b.dataset.paso === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
   $('#sig').hidden = n !== 1 && n !== 2;
-  if (n === 2) renderPaso2();
+  if (n === 2) { renderPaso2(); renderIA(); }
   if (n === 3) renderPaso3();
   if (n >= 1 && n <= 3) pasoActual = n;
   window.scrollTo(0, 0);
 }
 $('#empezar').addEventListener('click', () => ir(1));
-$('#demo').addEventListener('click', () => { items = JSON.parse(JSON.stringify(DEMO)); guardar(); renderPaso1(); ir(2); });
+$('#demo').addEventListener('click', () => { items = JSON.parse(JSON.stringify(DEMO)); ia = null; guardarIA(); guardar(); renderPaso1(); ir(2); });
 $('#sig').addEventListener('click', () => ir(pasoActual + 1));
 document.querySelectorAll('nav .pasos button').forEach(b => b.addEventListener('click', () => ir(+b.dataset.paso)));
 document.querySelectorAll('.pausar').forEach(b => b.addEventListener('click', () => ir(4)));
