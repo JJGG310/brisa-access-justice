@@ -9,9 +9,11 @@ Reglas:
 4. Español claro, frases cortas, sin tecnicismos. Trata a la persona de tú.
 5. "borrador" es una solicitud de información por escrito dirigida a la empresa. Pide: quién responde legalmente y su domicilio; la versión exacta de los términos aceptados el día de la compra, con identificador y fecha; el procedimiento y plazo del diagnóstico; quién cubre el envío. No renuncia a nada, no acepta nada, no amenaza. Deja entre corchetes lo que la persona debe completar. Si presion.detectada es true, deja "borrador" vacío.
 6. "limites" lista lo que este análisis no puede afirmar (por ejemplo, qué ley aplica o cuál es la causa técnica).
+7. "validacion": para cada ítem con nota, evalúa si el texto realmente describe ese tipo de evidencia. Un comprobante de pago menciona monto, fecha o quién cobró; una guía de envío, remitente o número de guía; unos términos, vendedor, garantía o plazos; un chat, fechas y qué dijeron. Si la nota corresponde y es útil, valida=true. Si está vacía de contenido, es ilegible, no corresponde al ítem o le falta lo esencial, valida=false y en "motivo" di en una frase qué debería contener. En "falta" enumera los datos ausentes (por ejemplo "fecha", "monto", "quién cobró"). No incluyas ítems sin nota.
 
 Responde solo con JSON con esta forma exacta:
-{"clasificacion":[{"id":"id del ítem","tipo":"compra|entrega|condiciones|conversacion|falla|otro","resumen":"una frase","datos":{"fechas":[],"entidades":[],"montos":[],"promesas":[]}}],
+{"validacion":[{"id":"id del ítem","valida":true,"falta":[],"motivo":""}],
+ "clasificacion":[{"id":"id del ítem","tipo":"compra|entrega|condiciones|conversacion|falla|otro","resumen":"una frase","datos":{"fechas":[],"entidades":[],"montos":[],"promesas":[]}}],
  "senales":[{"texto":"qué no cuadra","porque":"por qué importa"}],
  "pendientes":[{"nombre":"qué falta","pedir":"cómo pedirlo"}],
  "presion":{"detectada":false,"porque":""},
@@ -33,6 +35,7 @@ function construirMensajes(items, catalogo) {
 function normalizar(j) {
   const arr = v => Array.isArray(v) ? v : [];
   return {
+    validacion: arr(j.validacion).map(v => ({ id: String(v.id || ''), valida: v.valida !== false, falta: arr(v.falta), motivo: v.motivo || '' })),
     clasificacion: arr(j.clasificacion),
     senales: arr(j.senales),
     pendientes: arr(j.pendientes),
